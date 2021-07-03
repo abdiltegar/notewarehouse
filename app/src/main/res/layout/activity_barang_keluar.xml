@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".barangkeluar.BarangKeluarActivity">
+
+    <ImageView
+        android:id="@+id/logoBarangKeluar"
+        android:layout_width="49dp"
+        android:layout_height="51dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.044"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.023"
+        app:srcCompat="@mipmap/logopng_notewarehouse_foreground" />
+
+    <TextView
+        android:id="@+id/tvWelcomeBarangKeluar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Barang Keluar"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.131" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/BarangKeluarRecyclerView"
+        android:layout_width="360dp"
+        android:layout_height="500dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.45"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tableLayoutBarangKeluar"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TableLayout
+        android:id="@+id/tableLayoutBarangKeluar"
+        android:layout_width="360dp"
+        android:layout_height="20dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.454"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvWelcomeBarangKeluar"
+        app:layout_constraintVertical_bias="0.033">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tRowBarangKeluarTanggal"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Tanggal"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tRowBarangKeluarNamaBarang"
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Nama Barang"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tRowBarangKeluarJumlah"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Jumlah"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tRowBarangKeluarRuangan"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Ruangan"
+                android:textStyle="bold" />
+        </TableRow>
+
+    </TableLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabTambahBarangKeluar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/coklat"
+        android:clickable="true"
+        app:backgroundTint="@color/coklat"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.954"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.976"
+        app:srcCompat="@mipmap/logo_plus_foreground" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

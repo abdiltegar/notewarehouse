@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardLaporanStock"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    card_view:cardBackgroundColor="@color/abucoklat"
+    card_view:cardCornerRadius="0dp"
+    card_view:cardElevation="0dp"
+    card_view:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tRowLaporanStokKodeBarang"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:textSize="11sp"
+            android:text="BRG001" />
+
+        <TextView
+            android:id="@+id/tRowLaporanStokNamaBarang"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:textSize="11sp"
+            android:text="Beras" />
+
+        <TextView
+            android:id="@+id/tRowLaporanStokSatuan"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:textSize="11sp"
+            android:text="Kg" />
+
+        <TextView
+            android:id="@+id/tRowLaporanStokJumlah"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:textSize="11sp"
+            android:text="150" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
