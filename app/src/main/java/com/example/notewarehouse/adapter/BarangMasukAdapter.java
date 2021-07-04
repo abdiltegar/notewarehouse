@@ -95,7 +95,6 @@ public class BarangMasukAdapter extends RecyclerView.Adapter<BarangMasukAdapter.
                                 Intent inten = new Intent(v.getContext(), BarangMasukEditActivity.class);
                                 inten.putExtras(bendel);
                                 v.getContext().startActivity(inten);
-                                this.notify();
                                 break;
                             case R.id.menuhapus:
                                 AlertDialog.Builder alertdb = new AlertDialog.Builder(v.getContext());
@@ -119,7 +118,6 @@ public class BarangMasukAdapter extends RecyclerView.Adapter<BarangMasukAdapter.
                                 });
                                 AlertDialog adlg = alertdb.create();
                                 adlg.show();
-                                this.notify();
                                 break;
                         }
                         return true;
