@@ -29,78 +29,79 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
-    EditText etLoginEmail, etLoginPassword;
-    Button btnLogin;
-    String email, password, nama;
-    int id_user;
-    boolean statusLogin = false;
-    DBController controller = new DBController(this);
+    EditText etLoginEmail, etLoginPassword;//deklarasi variable EditText
+    Button btnLogin;//deklarasi variable Button
+    String email, password, nama;//deklarasi variable String
+    int id_user;//deklarasi variable int
+    boolean statusLogin = false;//deklarasi variable boolean
+    DBController controller = new DBController(this);//deklarasi variable controller menginisialisasi DBController
 
-    static String hostname = "http://192.168.100.8";
+    static String hostname = "http://192.168.100.8";//variable hostname untuk menyimpan alamat ip web service
 //    static String hostname = "http://10.20.14.90";
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private static String url_select = hostname+"/ws-notewarehouse/akun/login.php";
+    private static String url_select = hostname+"/ws-notewarehouse/akun/login.php";//alamat webservice untuk login
 //    private static String url_select = "http://10.20.14.90/ws-notewarehouse/akun/login.php";
+    //indeks dari webservice{
     public static final String TAG_STATUS = "status";
     public static final String TAG_DATA = "data";
     public static final String TAG_MESSAGE = "message";
     public static final String TAG_ID = "id_user";
     public static final String TAG_NAMA = "nama";
     public static final String TAG_EMAIL = "email";
+    //}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_login);//menset view
 
-        etLoginEmail = findViewById(R.id.etLoginEmail);
-        etLoginPassword = findViewById(R.id.etLoginPassword);
-        btnLogin = findViewById(R.id.btnLoginSubmit);
+        etLoginEmail = findViewById(R.id.etLoginEmail);//menghubungkan dengan EditText Email di view
+        etLoginPassword = findViewById(R.id.etLoginPassword);//menghubungkan dengan EditText Password di view
+        btnLogin = findViewById(R.id.btnLoginSubmit);//menghubungkan dengan Button Login di view
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        btnLogin.setOnClickListener(new View.OnClickListener() {//event saat button login diklik
             @Override
             public void onClick(View v) {
-                email = etLoginEmail.getText().toString();
-                password = etLoginPassword.getText().toString();
+                email = etLoginEmail.getText().toString();//mengambil nilai dari edittext email dan menyimpan di variable email
+                password = etLoginPassword.getText().toString();//mengambil nilai dari edittext password dan menyimpan di variable password
 
-                RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                StringRequest stringReq = new StringRequest(Request.Method.POST, url_select, new Response.Listener<String>() {
+                RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());//membuat requestQueue
+                StringRequest stringReq = new StringRequest(Request.Method.POST, url_select, new Response.Listener<String>() {//menentukan method dan url
                     @Override
-                    public void onResponse(String response) {
+                    public void onResponse(String response) {//respon dari webservice dimasukkan ke variable response
                         Log.d(TAG, "respon : " + response.toString());
 
                         try {
-                            JSONObject jObj = new JSONObject(response);
-                            statusLogin = jObj.getInt(TAG_STATUS) == 1 ? true : false;
-                            if (statusLogin) {
+                            JSONObject jObj = new JSONObject(response);//mengubah response menjadi JSONObject
+                            statusLogin = jObj.getInt(TAG_STATUS) == 1 ? true : false;//jika status dari webservice = 1 , maka statusLogin true
+                            if (statusLogin) {//jika status = true maka
                                 JSONObject arrayData = jObj.getJSONObject(TAG_DATA);
-                                id_user = arrayData.getInt(TAG_ID);
-                                nama = arrayData.getString(TAG_NAMA);
-                                email = arrayData.getString(TAG_EMAIL);
-//                                Toast.makeText(LoginActivity.this, "Sukses mengedit data", Toast.LENGTH_SHORT).show();
+                                id_user = arrayData.getInt(TAG_ID);//memasukkan id_user dari ws
+                                nama = arrayData.getString(TAG_NAMA);//memasukkan nama dari ws
+                                email = arrayData.getString(TAG_EMAIL);//memasukkan email dari ws
 
-                                HashMap<String, String> qvalues = new HashMap<>();
+                                HashMap<String, String> qvalues = new HashMap<>();// membuat hashmap untuk insert ke SQLite
                                 qvalues.put("id_user",String.valueOf(id_user));
                                 qvalues.put("nama",nama);
                                 qvalues.put("email",email);
 
-                                controller.insertData(qvalues);
+                                controller.insertData(qvalues);//memanggil insertData di DBController dengan parameter qvalues
 
-                                if(!nama.isEmpty()){
-                                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                                    startActivity(intent);
+                                if(!nama.isEmpty()){//jika nama kosong login gagal
+                                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);//membuat intent pindah ke halaman Home
+                                    startActivity(intent);//memulai intent
                                     finish();
                                 }else{
-                                    Toast.makeText(LoginActivity.this, "Gagal Login . Pastikan username dan password anda benar", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LoginActivity.this, "Gagal Login . Pastikan username dan password anda benar", Toast.LENGTH_SHORT).show();//menampilkan notifikasi gagal login
                                 }
 
                             } else {
-                                Toast.makeText(LoginActivity.this, "Gagal : "+jObj.getString(TAG_MESSAGE), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "Gagal : "+jObj.getString(TAG_MESSAGE), Toast.LENGTH_SHORT).show();//menampilkan notifikasi gagal dengan message dari ws
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(LoginActivity.this, "Gagal Login . Pastikan username dan password anda benar", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Gagal Login . Pastikan username dan password anda benar", Toast.LENGTH_SHORT).show();//menampilkan notifikasi gagal login
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -111,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }){
                     @Override
-                    protected Map<String, String> getParams(){
+                    protected Map<String, String> getParams(){//membuat parameter untuk dikirim ke ws
                         Map<String, String> params = new HashMap<>();
                         params.put("email", email);
                         params.put("password", password);

@@ -19,21 +19,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        new Handler().postDelayed(new Runnable() {
+        new Handler().postDelayed(new Runnable() {//membuat delay
             @Override
             public void run() {
-                HashMap<String, String> loggedUser = controller.findData();
-                if(loggedUser.isEmpty()){
+                HashMap<String, String> loggedUser = controller.findData();//mencari data user yang login di DB SQLite
+                if(loggedUser.isEmpty()){//jika kosong maka ke halaman login
                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                     startActivity(intent);
                     finish();
-                }else{
+                }else{//jika ditemukan maka ke halaman home
                     Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                     startActivity(intent);
                     finish();
                 }
 
             }
-        }, 3000);
+        }, 3000);//3 detik
     }
 }

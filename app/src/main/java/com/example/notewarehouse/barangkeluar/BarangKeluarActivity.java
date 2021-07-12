@@ -34,15 +34,16 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class BarangKeluarActivity extends AppCompatActivity {
-    private RecyclerView recyclerView;
-    private BarangKeluarAdapter adapter;
-    private ArrayList<BarangKeluar> barangKeluarArrayList = new ArrayList<BarangKeluar>();;
+    private RecyclerView recyclerView;//deklarasi variable RecyclerView
+    private BarangKeluarAdapter adapter;//deklarasi variable BarangKeluarAdapter
+    private ArrayList<BarangKeluar> barangKeluarArrayList = new ArrayList<BarangKeluar>();//deklarasi variable ArrayList<BarangKeluar>
     //    private ListView list;
-    private FloatingActionButton fab;
+    private FloatingActionButton fab;//deklarasi variable FloatingActionButton
 
-    static String hostname = "http://192.168.100.8";
+    static String hostname = "http://192.168.100.8";//alamat ws
 //    static String hostname = "http://10.20.14.90";
 
+    //alamat data barang keluar dan indeks dari ws {
     private static final String TAG = BarangKeluar.class.getSimpleName();
     private static String url_select = hostname+"/ws-notewarehouse/barang_keluar/";
     //    private static String url_select = "http://10.20.14.90/ws-notewarehouse/barang_keluar/";
@@ -59,11 +60,13 @@ public class BarangKeluarActivity extends AppCompatActivity {
     public static final String TAG_jumlah = "jumlah";
     public static final String TAG_tanggal = "tanggal";
     public static final String TAG_apakah_masuk = "apakah_masuk";
+    // }
 
-    ImageView logo;
+    ImageView logo;//deklarasi variable ImageView
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //menghubungkan dengan view {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barang_keluar);
 
@@ -71,51 +74,52 @@ public class BarangKeluarActivity extends AppCompatActivity {
         fab = findViewById(R.id.fabTambahBarangKeluar);
         logo = findViewById(R.id.logoBarangKeluar);
 
-        BacaData();
+        BacaData();//memanggil method baca data
 
         recyclerView = findViewById(R.id.BarangKeluarRecyclerView);
-        adapter = new BarangKeluarAdapter(barangKeluarArrayList);
+        adapter = new BarangKeluarAdapter(barangKeluarArrayList);//membuat adapter untuk recyclerview
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(BarangKeluarActivity.this);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(layoutManager);//set layout managernya
+        recyclerView.setAdapter(adapter);// set adapternya
+        // }
 
-        logo.setOnClickListener(new View.OnClickListener() {
+        logo.setOnClickListener(new View.OnClickListener() {//event ketika logo diklik
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(BarangKeluarActivity.this, HomeActivity.class);
-                startActivity(intent);
+                Intent intent = new Intent(BarangKeluarActivity.this, HomeActivity.class);//intent ke halaman home
+                startActivity(intent);//mulai intent
                 finish();
             }
         });
 
-        fab.setOnClickListener(new View.OnClickListener(){
+        fab.setOnClickListener(new View.OnClickListener(){//event ketika fab diklik
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(BarangKeluarActivity.this,BarangKeluarTambahActivity.class);
-                startActivity(intent);
+                Intent intent = new Intent(BarangKeluarActivity.this,BarangKeluarTambahActivity.class);//intent ke halaman Tambah Barang Keluar
+                startActivity(intent);//mulai intent
             }
         });
     }
 
-    public void BacaData(){
-        if(barangKeluarArrayList != null && barangKeluarArrayList.size() > 0){
-            barangKeluarArrayList.clear();
+    public void BacaData(){//method BacaData
+        if(barangKeluarArrayList != null && barangKeluarArrayList.size() > 0){//jika barangKeluarArrayList ada isinya
+            barangKeluarArrayList.clear();//mengkosongkan barangKeluarArrayList
         }
 
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());//membuat responQueue untuk memanggil ws
         StringRequest jArr = new StringRequest(url_select, new Response.Listener<String>() {
             @Override
-            public void onResponse(String response) {
+            public void onResponse(String response) {//variable response sebagai respon dari ws
                 Log.d(TAG, response);
 
                 try {
-                    JSONObject jObj = new JSONObject(response);
+                    JSONObject jObj = new JSONObject(response);//merubah respon menjadi JSONObject
                     boolean status = jObj.getInt(TAG_STATUS) == 1 ? true : false;
                     if (status) {
-                        JSONObject arrayData = jObj.getJSONObject(TAG_DATA);
-                        for (int i = 0; i < arrayData.length(); i++) {
-                            JSONObject obj = arrayData.getJSONObject('a'+String.valueOf(i));
-
+                        JSONObject arrayData = jObj.getJSONObject(TAG_DATA);//mengambil respon dengan indeks "data"
+                        for (int i = 0; i < arrayData.length(); i++) {//perulangan data yang ada di indeks "data"
+                            JSONObject obj = arrayData.getJSONObject('a'+String.valueOf(i));//mengambil data indeks ke i dari "data"
+                            //memasukkan ke item {
                             BarangKeluar item = new BarangKeluar();
                             item.setId(obj.getInt(TAG_id_arus));
                             item.setIdUser(obj.getInt(TAG_id_user));
@@ -127,8 +131,9 @@ public class BarangKeluarActivity extends AppCompatActivity {
                             item.setJumlah(obj.getInt(TAG_jumlah));
                             item.setTanggal(obj.getString(TAG_tanggal));
                             item.setApakahMasuk(obj.getInt(TAG_apakah_masuk) == 1 ? true : false);
+                            // }
 
-                            barangKeluarArrayList.add(item);
+                            barangKeluarArrayList.add(item);//memasukkan item ke barangKeluarArrayList
                         }
 
                     } else {

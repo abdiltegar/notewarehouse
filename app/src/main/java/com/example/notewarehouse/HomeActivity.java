@@ -17,12 +17,13 @@ import com.example.notewarehouse.laporanstok.LaporanStokActivity;
 import java.util.HashMap;
 
 public class HomeActivity extends AppCompatActivity {
-    TextView tvNama;
-    ImageView btnBarangMasuk, btnBarangKeluar, btnLaporanStok, btnLogout;
-    DBController controller = new DBController(this);
+    TextView tvNama;//deklarasi variable TextView
+    ImageView btnBarangMasuk, btnBarangKeluar, btnLaporanStok, btnLogout;//deklarasi variable ImageView
+    DBController controller = new DBController(this);//deklarasi variable controller menginisialisasi DBController
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //menghubungakan dengan view {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
@@ -31,50 +32,53 @@ public class HomeActivity extends AppCompatActivity {
         btnBarangKeluar = findViewById(R.id.btnHomeBarangKeluar);
         btnLaporanStok = findViewById(R.id.btnHomeLaporanStock);
         btnLogout = findViewById(R.id.btnLogout);
+        // }
 
-        HashMap<String, String> loggedUser = controller.findData();
+        HashMap<String, String> loggedUser = controller.findData();//mengambil data user yang login
 
+        //memasukkan data user yang login ke variable User {
         User user = new User();
         user.setId(loggedUser.get("id_user").toString());
         user.setNama(loggedUser.get("nama").toString());
         user.setEmail(loggedUser.get("email").toString());
+        /// }
 
-        tvNama.setText(user.getNama().toString());
+        tvNama.setText(user.getNama().toString());//menampilkan nama user yang login di TextView Nama
 
-        btnBarangMasuk.setOnClickListener(new View.OnClickListener() {
+        btnBarangMasuk.setOnClickListener(new View.OnClickListener() {//event ketika barang masuk diklik
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, BarangMasukActivity.class);
-                startActivity(intent);
+                Intent intent = new Intent(HomeActivity.this, BarangMasukActivity.class);//membuat intent ke halaman Barang Masuk
+                startActivity(intent);//memulai intent
 //                finish();
             }
         });
 
-        btnBarangKeluar.setOnClickListener(new View.OnClickListener() {
+        btnBarangKeluar.setOnClickListener(new View.OnClickListener() {//event ketika barang keluar diklik
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, BarangKeluarActivity.class);
-                startActivity(intent);
+                Intent intent = new Intent(HomeActivity.this, BarangKeluarActivity.class);//membuat intent ke halaman Barang Keluar
+                startActivity(intent);//memulai intent
 //                finish();
             }
         });
 
-        btnLaporanStok.setOnClickListener(new View.OnClickListener() {
+        btnLaporanStok.setOnClickListener(new View.OnClickListener() {//event ketika laporan stok diklik
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, LaporanStokActivity.class);
-                startActivity(intent);
+                Intent intent = new Intent(HomeActivity.this, LaporanStokActivity.class);//membuat intent ke halaman Laporan Stok
+                startActivity(intent);//memulai intent
 //                finish();
             }
         });
 
-        btnLogout.setOnClickListener(new View.OnClickListener() {
+        btnLogout.setOnClickListener(new View.OnClickListener() {//event ketika logout diklik
             @Override
             public void onClick(View v) {
-                controller.deleteData(user.getId());
+                controller.deleteData(user.getId());//menghapus data login user di SQLite
 
-                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
-                startActivity(intent);
+                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);//membuat intent ke halaman Login
+                startActivity(intent);//memulai intent
                 finish();
             }
         });
