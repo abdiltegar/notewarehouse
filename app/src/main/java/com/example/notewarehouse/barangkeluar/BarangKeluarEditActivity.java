@@ -41,19 +41,20 @@ import java.util.Locale;
 import java.util.Map;
 
 public class BarangKeluarEditActivity extends AppCompatActivity  {
-    private EditText etTanggal, etJumlah;
-    private Spinner spinJenisBarang, spinRuangan;
-    private Button simpanBtn, batalBtn;
-    String kode_barang, kode_ruangan, tanggal;
-    int success, jumlah, id_user, id_arus;
-    boolean status;
+    private EditText etTanggal, etJumlah;//deklarasi variable EditText
+    private Spinner spinJenisBarang, spinRuangan;//deklarasi variable Spinner
+    private Button simpanBtn, batalBtn;//deklarasi variable Button
+    String kode_barang, kode_ruangan, tanggal;//deklarasi variable String
+    int success, jumlah, id_user, id_arus;//deklarasi variable int
+    boolean status;//deklarasi variable boolean
 
-    static String hostname = "http://192.168.100.8";
+    static String hostname = "http://192.168.100.8";//alamat ip ws
 //    static String hostname = "http://10.20.14.90";
 
-    private static String url_spinner_jenisbarang = hostname+"/ws-notewarehouse/master/jenis_barang";
-    private static String url_spinner_ruangan = hostname+"/ws-notewarehouse/master/ruangan";
-    private static String url_update = hostname+"/ws-notewarehouse/barang_keluar/update.php";
+    private static String url_spinner_jenisbarang = hostname+"/ws-notewarehouse/master/jenis_barang";//alamat get jenis barang
+    private static String url_spinner_ruangan = hostname+"/ws-notewarehouse/master/ruangan";//alamat get ruangan
+    private static String url_update = hostname+"/ws-notewarehouse/barang_keluar/update.php";//alamat update
+    //indeks dari ws {
     private static final String TAG = BarangKeluarEditActivity.class.getSimpleName();
     private static final String TAG_STATUS = "status";
     private static final String TAG_DATA = "data";
@@ -62,26 +63,28 @@ public class BarangKeluarEditActivity extends AppCompatActivity  {
     private static final String TAG_nama_barang = "nama_barang";
     private static final String TAG_kode_ruangan = "kode_ruangan";
     private static final String TAG_nama_ruangan = "nama_ruangan";
+    // }
 
-    ArrayList<String> TextJenisBarangs = new ArrayList<String>();
-    ArrayList<String> ValueJenisBarangs = new ArrayList<String>();
+    ArrayList<String> TextJenisBarangs = new ArrayList<String>();//deklarasi arraylist text jenis barang
+    ArrayList<String> ValueJenisBarangs = new ArrayList<String>();//deklarasi arraylist value jenis barang
 
-    ArrayList<String> TextRuangans = new ArrayList<String>();
-    ArrayList<String> ValueRuangans = new ArrayList<String>();
+    ArrayList<String> TextRuangans = new ArrayList<String>();//deklarasi arraylist text ruangan
+    ArrayList<String> ValueRuangans = new ArrayList<String>();//deklarasi arraylist value ruangan
 
-    DBController controller = new DBController(this);
+    DBController controller = new DBController(this);//deklarasi controller
 
-    final Calendar myCalendar = Calendar.getInstance();
+    final Calendar myCalendar = Calendar.getInstance();//deklarasi calendar
 
-    private void updateLabel() {
+    private void updateLabel() {//method updatelabel
         String myFormat = "yyyy-MM-dd"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
-        etTanggal.setText(sdf.format(myCalendar.getTime()));
+        etTanggal.setText(sdf.format(myCalendar.getTime()));//men-set text dari edit tanggal dari calendar
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //menghubungkan dengan view {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barang_keluar_edit);
 
@@ -93,7 +96,9 @@ public class BarangKeluarEditActivity extends AppCompatActivity  {
 
         simpanBtn = findViewById(R.id.btnEditBarangKeluar);
         batalBtn = findViewById(R.id.btnBatalEditBarangKeluar);
+        // }
 
+        //membuat datepickerdialog {
         DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
@@ -105,43 +110,46 @@ public class BarangKeluarEditActivity extends AppCompatActivity  {
                 updateLabel();
             }
         };
+        // }
 
-        etTanggal.setOnClickListener(new View.OnClickListener() {
+        etTanggal.setOnClickListener(new View.OnClickListener() {//event edit text tanggal diklik
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 new DatePickerDialog(BarangKeluarEditActivity.this, date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();//menampilkan datepicker
             }
         });
 
-        DropDownListJenisBarang();
-        DropDownListRuangan();
+        DropDownListJenisBarang();//memanggil method DropDownListJenisBarang
+        DropDownListRuangan();//memanggil method DropDownListRuangan
 
+        //membuat bundle {
         Bundle bundle = getIntent().getExtras();
         id_arus = bundle.getInt("kunci_id_arus");
         tanggal = bundle.getString("kunci_tanggal");
         kode_barang = bundle.getString("kunci_kode_barang");
         kode_ruangan = bundle.getString("kunci_kode_ruangan");
         jumlah = bundle.getInt("kunci_jumlah");
+        // }
 
-        etTanggal.setText(tanggal);
-        spinJenisBarang.setSelection(ValueJenisBarangs.indexOf(String.valueOf(kode_barang)));
-        spinRuangan.setSelection(ValueRuangans.indexOf(String.valueOf(kode_ruangan)));
-        etJumlah.setText(String.valueOf(jumlah));
+        etTanggal.setText(tanggal);//set text etTanggal
+        spinJenisBarang.setSelection(ValueJenisBarangs.indexOf(String.valueOf(kode_barang)));//set selected spinJenisBarang
+        spinRuangan.setSelection(ValueRuangans.indexOf(String.valueOf(kode_ruangan)));//set selected spinRuangan
+        etJumlah.setText(String.valueOf(jumlah));//set text et Jumlah
 
-        simpanBtn.setOnClickListener(new View.OnClickListener(){
+        simpanBtn.setOnClickListener(new View.OnClickListener(){//event simpan button diklik
             @Override
             public void onClick(View v){
                 SimpanData();
-            }
+            }//memanggil method SimpanData
         });
 
-        batalBtn.setOnClickListener(new View.OnClickListener() {
+        batalBtn.setOnClickListener(new View.OnClickListener() {//event batalBtn diklik
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(BarangKeluarEditActivity.this, BarangKeluarActivity.class);
+                Intent intent = new Intent(BarangKeluarEditActivity.this, BarangKeluarActivity.class);//membuat intent ke halaman barang keluar
                 startActivity(intent);
                 finish();
             }
@@ -149,24 +157,26 @@ public class BarangKeluarEditActivity extends AppCompatActivity  {
     }
 
     public void DropDownListJenisBarang(){
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());//membuat requestQueue untuk ke ws jenis barang
         StringRequest jArr = new StringRequest(url_spinner_jenisbarang, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.d(TAG, response);
                 try {
-                    JSONObject jObj = new JSONObject(response);
+                    JSONObject jObj = new JSONObject(response);//merubah respon menjadi JSONObject
                     boolean status = jObj.getInt(TAG_STATUS) == 1 ? true : false;
                     if (status) {
                         JSONObject arrayData = jObj.getJSONObject(TAG_DATA);
                         for (int i = 0; i < arrayData.length(); i++) {
                             JSONObject obj = arrayData.getJSONObject('a'+String.valueOf(i));
-                            TextJenisBarangs.add(obj.getString(TAG_kode_barang)+" - "+obj.getString(TAG_nama_barang));
-                            ValueJenisBarangs.add(obj.getString(TAG_kode_barang));
+                            TextJenisBarangs.add(obj.getString(TAG_kode_barang)+" - "+obj.getString(TAG_nama_barang));//memasukkan ke array list Text Jenis Barang
+                            ValueJenisBarangs.add(obj.getString(TAG_kode_barang));//memasukkan ke array list value jenis barang
                         }
+                        //set adapter ke spinner {
                         ArrayAdapter<String> arrayAdapterBarang = new ArrayAdapter<String>(BarangKeluarEditActivity.this,android.R.layout.simple_spinner_item, TextJenisBarangs);
                         arrayAdapterBarang.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         spinJenisBarang.setAdapter(arrayAdapterBarang);
+                        // }
                     } else {
                         Toast.makeText(BarangKeluarEditActivity.this, "Gagal : "+jObj.getString(TAG_MESSAGE), Toast.LENGTH_SHORT).show();
                     }
@@ -198,12 +208,14 @@ public class BarangKeluarEditActivity extends AppCompatActivity  {
                         JSONObject arrayData = jObj.getJSONObject(TAG_DATA);
                         for (int i = 0; i < arrayData.length(); i++) {
                             JSONObject obj = arrayData.getJSONObject('a'+String.valueOf(i));
-                            TextRuangans.add(obj.getString(TAG_kode_ruangan)+" - "+obj.getString(TAG_nama_ruangan));
-                            ValueRuangans.add(obj.getString(TAG_kode_ruangan));
+                            TextRuangans.add(obj.getString(TAG_kode_ruangan)+" - "+obj.getString(TAG_nama_ruangan));//memasukkan ke array list Text Ruangan
+                            ValueRuangans.add(obj.getString(TAG_kode_ruangan));//memasukkan ke array list value ruangan
                         }
+                        //set adapter ke spinner {
                         ArrayAdapter<String> arrayAdapterRuangan = new ArrayAdapter<String>(BarangKeluarEditActivity.this,android.R.layout.simple_spinner_item, TextRuangans);
                         arrayAdapterRuangan.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         spinRuangan.setAdapter(arrayAdapterRuangan);
+                        // }
                     } else {
                         Toast.makeText(BarangKeluarEditActivity.this, "Gagal : "+jObj.getString(TAG_MESSAGE), Toast.LENGTH_SHORT).show();
                     }
@@ -226,13 +238,15 @@ public class BarangKeluarEditActivity extends AppCompatActivity  {
         if(etTanggal.getText().toString().equals("") || etJumlah.getText().toString().equals("") || spinJenisBarang.getSelectedItem().toString().equals("") || spinRuangan.getSelectedItem().toString().equals("")){
             Toast.makeText(BarangKeluarEditActivity.this, "Semua harus diisi data", Toast.LENGTH_SHORT).show();
         }else{
+            //memasukkan data dari form ke variable {
             tanggal = etTanggal.getText().toString();
             kode_barang = ValueJenisBarangs.get(spinJenisBarang.getSelectedItemPosition());
             kode_ruangan = ValueRuangans.get(spinRuangan.getSelectedItemPosition());
             jumlah = Integer.valueOf(etJumlah.getText().toString());
+            // }
 
             HashMap<String, String> loggedUser = controller.findData();
-            id_user = Integer.valueOf(loggedUser.get("id_user"));
+            id_user = Integer.valueOf(loggedUser.get("id_user"));//mengambil id_user dari user yang login
 
             RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
             StringRequest stringRequest = new StringRequest(Request.Method.POST, url_update, new Response.Listener<String>() {
@@ -261,6 +275,7 @@ public class BarangKeluarEditActivity extends AppCompatActivity  {
                     Toast.makeText(BarangKeluarEditActivity.this, "Gagal simpan data", Toast.LENGTH_SHORT).show();
                 }
             }){
+                //memasukkan parameter untuk dikirim ke ws
                 @Override
                 protected Map<String, String> getParams(){
                     Map<String, String> params = new HashMap<>();
@@ -272,6 +287,7 @@ public class BarangKeluarEditActivity extends AppCompatActivity  {
 
                     return params;
                 }
+                // }
             };
             requestQueue.add(stringRequest);
         }
